@@ -1,8 +1,22 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
+import { AppModule } from './modules/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'todo',
+      protoPath: join(__dirname, 'modules/todo/todo.proto'),
+      url: configService.get('GRPC_CONNECTION_URL'),
+    },
+  });
+
+  await app.startAllMicroservices();
 }
 bootstrap();
