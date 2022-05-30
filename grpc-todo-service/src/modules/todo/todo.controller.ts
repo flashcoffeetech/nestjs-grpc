@@ -11,7 +11,7 @@ export class TodoController {
   constructor(private readonly prismaService: PrismaService) {}
 
   @GrpcMethod('TodoService', 'Create')
-  createTodo(data: CreateTodo): Promise<Todo> {
+  create(data: CreateTodo): Promise<Todo> {
     return this.prismaService.todo.create({ data });
   }
 

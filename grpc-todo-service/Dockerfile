@@ -1,6 +1,6 @@
 FROM node:14
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/grpc_todo_service
 
 COPY package.json ./
 

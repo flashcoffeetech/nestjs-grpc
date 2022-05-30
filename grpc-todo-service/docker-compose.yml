@@ -7,20 +7,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: ["yarn", "start:dev"]
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - .:/usr/src/grpc_todo_service
+      - /usr/src/grpc_todo_service/node_modules
     restart: unless-stopped
     depends_on:
       - mysql
     environment:
       NODE_ENV: dev
+      COMPOSE_PROJECT_NAME: grpc
       DATABASE_URL: "mysql://root:password@mysql:3306/todo_service?schema=public"
-      PORT: 3001
+      GRPC_CONNECTION_URL: 0.0.0.0:3001
     ports:
       - '3001:3001'
       - '9229:9229'
+    networks:
+      - dev-network
   
   mysql:
     image: mysql/mysql-server:latest
@@ -30,3 +32,8 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: todo_service
+    networks:
+      - dev-network
+
+networks:
+  dev-network: {}
