@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package todo;
+
+service TodoService {
+    rpc Create (CreateTodo) returns (Todo) {}
+    rpc FindAll (FindAllParams) returns (AllTodoResponse) {}
+    rpc FindOne (TodoById) returns (Todo) {}
+    rpc Update (Todo) returns (Todo) {}
+    rpc Remove (TodoById) returns (DeleteTodoResponse) {}
+}
+
+message Todo {
+    int32 id = 1;
+    string title = 2;
+    string content = 3;
+    bool isActive = 4;
+}
+
+message CreateTodo {
+    string title = 1;
+    string content = 2;
+    bool isActive = 3;
+}
+
+message TodoById {
+    int32 id = 1;
+}
+
+message FindAllParams {}
+
+message AllTodoResponse {
+    repeated Todo todos = 1;
+}
+
+message DeleteTodoResponse {}

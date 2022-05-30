@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  gateway:
+    container_name: grpc-api-gateway
+    image: grpc-api-gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/grpc_api_gw
+      - /usr/src/grpc_api_gw/node_modules
+    restart: unless-stopped
+    environment:
+      NODE_ENV: dev
+      GRPC_CONNECTION_URL: 172.18.0.3:3001
+      COMPOSE_PROJECT_NAME: grpc
+    ports:
+      - '3000:3000'
+  
+networks:
+  default:
+    external:
+      name: grpc
