@@ -21,8 +21,6 @@ services:
     ports:
       - '3001:3001'
       - '9229:9229'
-    networks:
-      - dev-network
   
   mysql:
     image: mysql/mysql-server:latest
@@ -32,8 +30,8 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: todo_service
-    networks:
-      - dev-network
 
 networks:
-  dev-network: {}
+  default:
+    external:
+      name: grpc
