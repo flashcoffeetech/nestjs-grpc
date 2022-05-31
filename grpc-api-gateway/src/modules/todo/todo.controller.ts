@@ -30,8 +30,8 @@ export class TodoController implements OnModuleInit {
   }
 
   @Post()
-  create(@Body() createTodoDto: CreateTodo) {
-    return this.todoService.create(createTodoDto);
+  create(@Body() todo: CreateTodo) {
+    return this.todoService.create(todo);
   }
 
   @Get()
@@ -45,9 +45,9 @@ export class TodoController implements OnModuleInit {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTodoDto: Todo) {
-    if (+id === updateTodoDto.id) {
-      return this.todoService.update(updateTodoDto);
+  update(@Param('id') id: string, @Body() updateTodo: Todo) {
+    if (+id === updateTodo.id) {
+      return this.todoService.update(updateTodo);
     }
 
     throw new HttpException('Todo ID does not match!', HttpStatus.BAD_REQUEST);
