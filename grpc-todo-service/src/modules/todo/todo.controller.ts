@@ -1,5 +1,5 @@
-import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { Controller, UseFilters } from '@nestjs/common';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import { PrismaService } from '../../services/prisma.service';
 import { CreateTodo } from './dto/create-todo.dto';
 import { TodoById } from './dto/todo-by-id.dto';
@@ -11,8 +11,21 @@ export class TodoController {
   constructor(private readonly prismaService: PrismaService) {}
 
   @GrpcMethod('TodoService', 'Create')
-  create(data: CreateTodo): Promise<Todo> {
-    return this.prismaService.todo.create({ data });
+  async create(data: CreateTodo): Promise<Todo> {
+    const { title } = data;
+    const isTitleExist = await this.prismaService.todo.findFirst({
+      where: {
+        title,
+      },
+    });
+
+    console.info(isTitleExist);
+
+    if (!isTitleExist) {
+      return this.prismaService.todo.create({ data });
+    }
+
+    throw new RpcException('Data already exists!');
   }
 
   @GrpcMethod('TodoService', 'FindAll')

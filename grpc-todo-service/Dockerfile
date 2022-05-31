@@ -11,6 +11,4 @@ COPY . .
 RUN yarn build && \
     yarn cache clean
 
-RUN npx prisma generate
-
 CMD ["node", "dist/main"]
